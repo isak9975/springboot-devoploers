@@ -24,5 +24,23 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build #프로젝트를 빌드하는 명령어
 
-      - name : Get current time # 현재 시간 가져오기
+      - name: Get current time # 현재 시간 가져오기
         uses: josStorer/get-current-time@v2.0.2
+        id: current-time
+        with:
+          format: YYYY-MM-DDTHH-mm-ss
+          utcOffset: "+09:00"
+
+      - name: Set artifact
+        run: echo "artifact=$(ls .build/libs)" >> %GITHUB_ENV
+
+      - name: Beanstalk Deploy
+        uses: einaregilsson/beanstalk-deploy@v20
+        with:
+          aws_access_key: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws_secret_key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          application_name: ReSpringApp
+          environment_name: ReSpringApp-env
+          version_label: github-action-${{steps.current-time.outputs.formattedTime}}
+          region: ap-northeast-2
+          deployment-package: ./build/libs${{env.artifact}}
