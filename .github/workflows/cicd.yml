@@ -24,13 +24,13 @@ jobs:
       - name: Build with Gradle
         run: ./gradlew clean build #프로젝트를 빌드하는 명령어
 
-      - name: Get current time # 현재 시간 가져오기
+      - name: Get current time #현재 시간 가져오기
         uses: josStorer/get-current-time@v2.0.2
         id: current-time
         with:
           format: YYYY-MM-DDTHH-mm-ss
           utcOffset: "+09:00"
-
+      
       - name: Set artifact
         run: echo "artifact=$(ls ./build/libs)" >> $GITHUB_ENV
 
@@ -43,4 +43,4 @@ jobs:
           environment_name: ReSpringApp-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment-package: ./build/libs/${{env.artifact}}
+          deployment_package: ./build/libs/${{env.artifact}}
