@@ -43,4 +43,4 @@ jobs:
           environment_name: ReSpringApp-env
           version_label: github-action-${{steps.current-time.outputs.formattedTime}}
           region: ap-northeast-2
-          deployment-package: ./build/libs${{env.artifact}}
+          deployment-package: ./build/libs/${{env.artifact}}
